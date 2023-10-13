@@ -13,9 +13,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/users/getAll").permitAll()
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/users/getAll").permitAll()
+                .antMatchers("/h2-console/**",
+                        "/v2/api-docs/**",
+                        "/swagger-ui/**",
+                        "/configuration/**",
+                        "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated();
-    }
 
+        http.headers().frameOptions().sameOrigin();
+
+
+    }
 
 }

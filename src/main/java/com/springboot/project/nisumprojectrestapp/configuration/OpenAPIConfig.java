@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@SecurityScheme(
+        type = SecuritySchemeType.HTTP,
+        name = "basicAuth",
+        scheme = "basic")
 public class OpenAPIConfig {
     /**
      * Para la cabecera del documento generado par openapi / swagger.
@@ -22,4 +26,6 @@ public class OpenAPIConfig {
                         .version("1.0")
                 );
     }
+
+
 }
