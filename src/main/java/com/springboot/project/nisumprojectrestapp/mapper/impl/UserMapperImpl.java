@@ -10,6 +10,7 @@ import com.springboot.project.nisumprojectrestapp.mapper.IUserPhoneMapper;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -23,6 +24,9 @@ public class UserMapperImpl implements IUserMapper {
     private final ModelMapper modelMapper;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     private IUserPhoneMapper userPhoneMapper;
 
     @Override
@@ -33,7 +37,7 @@ public class UserMapperImpl implements IUserMapper {
         userEntity.setUuid(java.util.UUID.randomUUID().toString());
         userEntity.setName(userRequestDto.getName());
         userEntity.setEmail(userRequestDto.getEmail());
-        userEntity.setPassword(userRequestDto.getPassword());
+        userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userEntity.setIsActive(Boolean.TRUE);
         userEntity.setDateCreated(LocalDate.now());
         userEntity.setDateModified(LocalDate.now());

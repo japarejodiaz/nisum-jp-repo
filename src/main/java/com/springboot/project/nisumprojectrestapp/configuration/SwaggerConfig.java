@@ -53,7 +53,7 @@ public class SwaggerConfig implements WebMvcConfigurer  {
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
-                .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()))
+                .securitySchemes(Arrays.asList(securitySchema(), apiKey()))
                 .apiInfo(apiInfo());
 
 
@@ -61,7 +61,7 @@ public class SwaggerConfig implements WebMvcConfigurer  {
 
     @Bean
     public SecurityScheme apiKey() {
-        return new ApiKey(HttpHeaders.AUTHORIZATION, "apiKey", "header");
+        return new ApiKey("JWT", "Authorization", "header");
     }
 
     @Bean
@@ -90,12 +90,12 @@ public class SwaggerConfig implements WebMvcConfigurer  {
 
     private List<SecurityReference> defaultAuth() {
 
-        final AuthorizationScope[] authorizationScopes = new AuthorizationScope[3];
-        authorizationScopes[0] = new AuthorizationScope("read", "read all");
-        authorizationScopes[1] = new AuthorizationScope("trust", "trust all");
-        authorizationScopes[2] = new AuthorizationScope("write", "write all");
+        AuthorizationScope authorizationScope = new AuthorizationScope("global","accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
 
-        return Collections.singletonList(new SecurityReference("oauth2", authorizationScopes));
+       // return Collections.singletonList(new SecurityReference("oauth2", authorizationScopes));
     }
 
     @Bean

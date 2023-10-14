@@ -42,3 +42,6 @@ springfox:
 config:
   oauth2:
     userAuthorizationUri: http://localhost:8080/oauth/token
+  rule:
+    password: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,16}$'
+

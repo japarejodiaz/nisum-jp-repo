@@ -7,6 +7,7 @@ import com.springboot.project.nisumprojectrestapp.exceptions.UserBadRequestExcep
 import com.springboot.project.nisumprojectrestapp.repository.IUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -17,6 +18,8 @@ import java.util.regex.Matcher;
 @Slf4j
 public class UserValidationUtil {
 
+    /*@Value("${config.rule.password}")
+    private static String PASSWORD_REGEX;*/
 
     @Autowired
     private IUserRepository userRepository;
