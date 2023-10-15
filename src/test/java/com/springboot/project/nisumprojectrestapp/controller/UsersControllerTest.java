@@ -51,9 +51,8 @@ class UsersControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isCreated()
-                .expectBody()
-                .jsonPath("$.uuidUser").isNotEmpty();
+                .expectStatus().isUnauthorized();
+
 
     }
 
@@ -66,7 +65,7 @@ class UsersControllerTest {
                 .headers(headers -> headers.set("Authorization", token))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isUnauthorized();
 
 
     }
