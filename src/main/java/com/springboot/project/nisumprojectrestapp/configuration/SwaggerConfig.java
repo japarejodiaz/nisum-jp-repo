@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//import static com.google.common.collect.Lists.newArrayList;
 import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
 
 @Configuration
@@ -107,12 +106,11 @@ public class SwaggerConfig implements WebMvcConfigurer  {
      * @return ApiInf
      */
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Nusum App").description("")
-                .termsOfServiceUrl("https://www.example.com/api")
-                .contact(new Contact("Developers", "https://projects.spring.io/spring-boot/", ""))
-                .license("Open Source")
+        return new ApiInfoBuilder().title("Nisum App").description("")
+                .contact(new Contact("Developers", "http://localhost:8080/", "japarejo.diaz@gmail.com"))
+                .license("Nisum App Test")
                 .licenseUrl("\"https://www.apache.org/licenses/LICENSE-2.0")
-                .version("1.0.0")
+                .version("0.0.1")
                 .build();
 
     }

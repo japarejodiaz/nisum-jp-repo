@@ -1,55 +1,81 @@
-# Project Nisum TEST 
+# Project Nisum APP TEST Jesus Parejo 
 ***
 - Proyecto para realizar la evaluacion de recurso de aplicacion REST que realiza la creacion de usuario con los datos 
 - personales y de telefono.
 
 # Repositorio GIT del Aplicativo. 
-- El repositorio se encuentra en la siguiente direccion https://github.com/japarejodiaz/nisum-jp-test-project.git
+- El repositorio se encuentra en la siguiente direccion ```https://github.com/japarejodiaz/nisum-jp-repo.git```
 
 ##  Clonar el repositorio
-- git clone https://github.com/japarejodiaz/nisum-jp-test-project.git
-- Rama master y feature/dev-20230831 (bajar y clonar de la rama feature/dev-20230831)
-
+- Repositorio publico ```https://github.com/japarejodiaz/nisum-jp-repo.git``` 
+- para clonarlo ```git clone https://github.com/japarejodiaz/nisum-jp-repo.git```
+- Rama del proyecto ```main``` 
+- 
 ## Para hacer el build. 
-- mvn clean install -> Genera el proyecto jar.
-- mvn clean install -DskipTests -> Genera el proyecto sin las test.
+- para buildearlo ```mvn clean install``` -> Genera el proyecto jar.
+- para buildearlo sin las test ```mvn clean install -DskipTests``` -> Genera el proyecto sin las test.
 
-# Ejecutar el proyecto 
-- nisum-project-rest-app/target$ java -jar nisum-project-rest-app-0.0.1-SNAPSHOT.jar
+## Para ejecutarlo desde la linea de comando
+- Para ejecutarlo desde la linea de comando ```mvn clean install spring-boot:run -DskipTests``` 
 
 #Swagger del proyecto URL
 - Esta es la direccion del Swagger para las pruebas de las funcionalidades ````http://localhost:8080/swagger-ui/index.html#/````
 
+# URL para generar token de autenticacion - desde Postman
+- ```http://localhost:8080/oauth/token```
+- Parametros requeridos para el token Body en Postman
+- Tipo de body a configurar = ```x-www-form-urlencoded```
+- ```username = japarejo@gmail.com```
+- ```password = 12345```
+- ```grant_type = password```
+- Header 
+- ```Content-type = application/x-www-form-urlencoded```
+- Autorization
+- Type = Basic Auth 
+- Ingresar los parametros para Authorizacion
+- ```username = angularapp```
+- ```password = 123456```
+
+# Cada uno de los endpoints de servicio debe inyectar en postman o swagger 
+Autorization 
+- ```Type = Bearer Token```
+- Colocar en el campo token el valor del token generado en el ```http://localhost:8080/oauth/token``` 
+
 # URL Base de Proyecto de Prueba. 
-- http://localhost:8080/users
-
-# Operaciones desarrolladas 
-- POST -> http://localhost:8080/users/addUser
-- GET -> http://localhost:8080/users/userById
-- GET -> http://localhost:8080/users/userByUuid
-- GET -> http://localhost:8080/users/getAllUsers/{page}/{size}
-- DELETE -> http://localhost:8080/users/deleteUserById
-
-# Swagger configurado 
-- URL -> http://localhost:8080/swagger-ui.html
+- ```http://localhost:8080/users```
+# Operaciones desarrolladas de usuario
+- POST -> ```http://localhost:8080/users/addUser```
+- PUT -> ```http://localhost:8080/users/updateUser```
+- GET -> ```http://localhost:8080/users/userById```
+- GET -> ```http://localhost:8080/users/userByUuid```
+- GET ->  ```http://localhost:8080/users/getAllUsers/{page}/{size}```
+- DELETE -> ```http://localhost:8080/users/deleteUserByUuid```
 
 # Base de datos y version de java
-- Se configuro base de datos H2, la misma esta en el application.yml.
+- Se configuró base de datos H2, la misma esta en el application.yml ````url: jdbc:h2:mem:nisumdb````.
+- usuario de base de datos ```sa``` no requiere para las pruebas password
+- Cabe destacar que al arrancar el proyecto se crea la base de datos y los primeros datos bases para la autenticacion de usuario y su token 
 - url: jdbc:h2:mem:nisumdb
-- JDK 17.
+- Version de java ```JDK 17```.
 
 # Configuracion de proyecto 
--Al levantar el proyecto la configuracion genera de forma automatica las tablas de base de datos 
-- al levantar el proyecto. 
-- La base de datos que tiene dos tablas: users y users_phone, relacionadas por el id de usuario. 
+- Al Arrancar el proyecto la configuracion genera de forma automatica las tablas de base de datos 
+- al levantar el proyecto y se genera la data base para el usuario de autenticacion de la aplicacion. 
+- La base de datos que tiene 4 tablas: 
+- ```users``` 
+- ```roles```
+- ```users_roles``` informacion de ROL se crea solo por script para el token de autenticacion:
+  - Roles ```ROLE_ADMIN``` Y ``ROLE_USER``
+- ```users_phone``` relacionadas por el id de usuario. 
 
-# Condiciones de la contrasena.
-Adicionalmente se me olvidada para el password tiene las siguientes condiciones:
-- Minimo de 8 caractares y maximo 16.
+# Condiciones de la contrase#a.
+Adicionalmente se configura para el password en el archivo application.yml y las mismas se configuran ahi 
+las siguientes condiciones:
+- Minimo de 8 y maximo 12 Caracteres.
 - Una letra mayuscula
 - Una letra minuscula
 - Un numero
-- Un caracter especial. 
+- Un caracter especial entre los siguientes ```@#$%``` 
 
 
 
