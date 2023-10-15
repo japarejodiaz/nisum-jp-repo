@@ -1,7 +1,7 @@
 # Project Nisum APP TEST Jesus Parejo 
 ***
 Proyecto para realizar la evaluacion de recurso de aplicacion REST que realiza la creacion de usuario con los datos 
-personales y de telefono.
+personales y de telefono. En el manual .docx enviado al correo de finalizacion instrucciones para testearlo adicionales a este README.
 
 # Repositorio GIT del Aplicativo. 
 El repositorio se encuentra en la siguiente direccion ```https://github.com/japarejodiaz/nisum-jp-repo.git```
