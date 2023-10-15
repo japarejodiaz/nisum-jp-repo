@@ -41,6 +41,7 @@ class UsersControllerTest {
         request.setUserPhones(requestPList);
 
         client.post().uri("http://localhost:8080/users/addUser")
+                .headers( headers -> headers.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTcyNTIxNDAsInVzZXJfbmFtZSI6ImphcGFyZWpvQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwianRpIjoiSUVRbklsalQzaU92UkNjOHZGbFVqSG5Ka1AwIiwiY2xpZW50X2lkIjoiYW5ndWxhcmFwcCIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.E96pi8XgUvFphkM_v5TRP__w_hDQ78VfaeNdejcEsY0"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()

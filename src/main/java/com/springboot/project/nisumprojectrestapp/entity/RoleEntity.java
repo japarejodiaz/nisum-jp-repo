@@ -24,7 +24,7 @@ public class RoleEntity implements Serializable  {
     @Column(name = "role_id")
     private Long idRol;
 
-    @Column(name = "NOMBRE", unique = true,nullable = false, length = 250)
+    @Column(name = "NAME", unique = true,nullable = false, length = 250)
     private String name;
 
 }

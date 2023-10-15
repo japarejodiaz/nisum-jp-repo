@@ -1,5 +1,6 @@
 package com.springboot.project.nisumprojectrestapp.service;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDtos;
@@ -38,9 +39,22 @@ public interface IUserService {
 
     /**
      * Servicio de eliminacion de usuario por id
-     * @param idUser
+     * @param uuid
      */
-    void deleteUserById(Long idUser);
+    void deleteUserById(String uuid);
 
+    /**
+     * Servicio para consultas de usuarios sin  pagineo
+     * @param page
+     * @param size
+     * @return
+     */
     UserResponseDtos getUsersAll();
+
+    /**
+     * Servicio de creacion de usuario
+     * @param request
+     * @return
+     */
+    UserResponseDto updateUser (String uuidUser, UserRequestActDto request);
 }

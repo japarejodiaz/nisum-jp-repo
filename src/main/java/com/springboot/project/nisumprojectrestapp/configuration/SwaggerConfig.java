@@ -32,8 +32,8 @@ import static org.hibernate.validator.internal.util.CollectionHelper.newArrayLis
 public class SwaggerConfig implements WebMvcConfigurer  {
 
 
-    // @Value("${config.oauth2.accessTokenUri}")
-    private static final String accessTokenUri = "http://localhost:8080/oauth/token";
+    @Value("${config.oauth2.userAuthorizationUri}")
+    private String accessTokenUri;
 
 
     public static final String securitySchemaOAuth2 = "oauth2schema";
@@ -49,15 +49,13 @@ public class SwaggerConfig implements WebMvcConfigurer  {
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                //.apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.springboot.project.nisumprojectrestapp.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Arrays.asList(securitySchema(), apiKey()))
-                .apiInfo(apiInfo());
-
-
-    }
+                .apiInfo(apiInfo());    }
 
     @Bean
     public SecurityScheme apiKey() {

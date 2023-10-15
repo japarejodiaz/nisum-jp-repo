@@ -1,9 +1,12 @@
 package com.springboot.project.nisumprojectrestapp.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class ErrorDetails {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
     private String message;
     private String details;

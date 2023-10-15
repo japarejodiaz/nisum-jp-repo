@@ -1,4 +1,4 @@
-package com.springboot.project.nisumprojectrestapp.configuration;
+package com.springboot.project.nisumprojectrestapp.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

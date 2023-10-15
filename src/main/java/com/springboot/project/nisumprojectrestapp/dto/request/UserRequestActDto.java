@@ -1,8 +1,9 @@
 package com.springboot.project.nisumprojectrestapp.dto.request;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -10,13 +11,17 @@ import lombok.*;
 @Getter
 @Setter
 @ApiModel(
-        value = "UserPhoneRequestDto",
+        value = "UserRequestActDto",
         description = "Represents the data needed to created user"
 )
-public class UserPhoneRequestDto {
+public class UserRequestActDto {
 
-    private String numberPhone;
-    private String cityCode;
-    private String countryCode;
+    private String name;
+
+    private String email;
+
+    private String password;
+
+    private List<UserPhoneRequestActDto> userPhones;
 
 }

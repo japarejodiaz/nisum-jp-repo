@@ -32,7 +32,7 @@ public class UserPhonesEntity implements Serializable  {
     private String countryCode;
 
     @ManyToOne
-    @JoinColumn(name = "USUARIO_ID")
+    @JoinColumn(name = "USER_ID")
     private UserEntity userEntity;
 
 }

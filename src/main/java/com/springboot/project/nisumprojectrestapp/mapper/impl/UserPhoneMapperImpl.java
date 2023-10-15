@@ -1,5 +1,6 @@
 package com.springboot.project.nisumprojectrestapp.mapper.impl;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserPhoneResponseDto;
 import com.springboot.project.nisumprojectrestapp.entity.UserEntity;
@@ -68,5 +69,18 @@ public class UserPhoneMapperImpl implements IUserPhoneMapper {
         });
 
         return userPhoneResponseDtoList;
+    }
+
+    @Override
+    public UserPhonesEntity dtoToEntity(UserPhoneRequestActDto userPhoneRequestDto, UserEntity userEntity) {
+
+        UserPhonesEntity userPhonesEntity = new UserPhonesEntity();
+
+        userPhonesEntity.setIdPhone(userPhoneRequestDto.getIdPhone());
+        userPhonesEntity.setCityCode(userPhoneRequestDto.getCityCode());
+        userPhonesEntity.setCountryCode(userPhoneRequestDto.getCountryCode());
+        userPhonesEntity.setNumberPhone(userPhoneRequestDto.getNumberPhone());
+        userPhonesEntity.setUserEntity(userEntity);
+        return userPhonesEntity;
     }
 }

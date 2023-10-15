@@ -1,5 +1,6 @@
 package com.springboot.project.nisumprojectrestapp.controller;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDtos;
@@ -150,7 +151,7 @@ public class UsersController {
 
     }
 
-    @DeleteMapping(value = "/deleteUserById")
+    @DeleteMapping(value = "/deleteUserByUuid")
     @ApiOperation(value = "Delete a User by Id",
             httpMethod = "DELETE",
             response = Void.class)
@@ -158,16 +159,16 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(code = 204,
                     message = "Body content with basic information about persons",
-                    response = UserResponseFullDto[].class),
+                    response = Void.class),
             @ApiResponse(
                     code = 400,
                     message = "Describes errors on invalid payload received, e.g: missing fields, invalid data formats, etc.")
     })
-    public ResponseEntity deleteUserById(@ApiParam(name = "idUser", value = "Value user")
-                                 @RequestParam(value = "idUser", required = false) Long idUser) {
+    public ResponseEntity deleteUserByUuid(@ApiParam(name = "uuidUser", value = "Value user")
+                                 @RequestParam(value = "uuidUser", required = false) String uuidUser) {
 
-        log.debug("Deleting user [request]: {}", idUser);
-        userService.deleteUserById(idUser);
+        log.debug("Deleting user [request]: {}", uuidUser);
+        userService.deleteUserById(uuidUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -196,6 +197,41 @@ public class UsersController {
         return new ResponseEntity<>(personResponseFullDTOs, HttpStatus.OK);
 
 
+    }
+
+    @PutMapping(
+            value = "/updateUser",
+            consumes = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    @Operation(summary = "Update user by user id", method = "PUT",
+            security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiOperation(
+            value = "Associates a update User",
+            httpMethod = "PUT",
+            response = UserResponseDto.class,
+            authorizations = { @Authorization(value="basicAuth") }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 201,
+                    message = "If successfully added, it will add the Location HTTP header with the URI for this new resource",
+                    responseHeaders = {
+                            @ResponseHeader(name = "Location", description = "URI access path to the new resource added")
+                    }),
+            @ApiResponse(
+                    code = 400,
+                    message = "Describes errors on invalid payload received, e.g: missing fields, invalid data formats, etc.")}
+    )
+    public ResponseEntity<UserResponseDto> updateUser(
+            @ApiParam(name = "UserRequestActDto", value = "Payload data to create the new user")
+            @Valid @RequestBody UserRequestActDto userRequest,
+            @Valid @RequestParam String uuidUser) {
+
+        log.info("Request de datos de User Actualizacion " + userRequest.toString());
+
+        UserResponseDto userResponseDto = userService.updateUser(uuidUser, userRequest);
+
+        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
 
 

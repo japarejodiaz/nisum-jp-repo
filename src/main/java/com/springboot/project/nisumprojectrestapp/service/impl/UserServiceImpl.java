@@ -1,6 +1,8 @@
 package com.springboot.project.nisumprojectrestapp.service.impl;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestDto;
+import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserPhoneResponseDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDto;
@@ -14,6 +16,7 @@ import com.springboot.project.nisumprojectrestapp.mapper.IUserPhoneMapper;
 import com.springboot.project.nisumprojectrestapp.repository.IUserPhoneRepository;
 import com.springboot.project.nisumprojectrestapp.repository.IUserRepository;
 import com.springboot.project.nisumprojectrestapp.service.IUserService;
+import com.springboot.project.nisumprojectrestapp.utils.InterceptorUtils;
 import com.springboot.project.nisumprojectrestapp.utils.UserValidationUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +70,6 @@ public class UserServiceImpl implements IUserService {
         UserEntity userEntity = userMapper.dtoToEntity(request);
         /* Se guarda la informacion de la data de user */
         userEntity = userRepository.save(userEntity);
-
-        log.info("id de creacion" + userEntity.getIdUser());
 
         for (UserPhoneRequestDto listPhone: request.getUserPhones()) {
             UserPhonesEntity userPhonesEntity = userPhoneMapper.dtoToEntity(listPhone, userEntity);
@@ -179,22 +180,22 @@ public class UserServiceImpl implements IUserService {
     /**
      * Servicio de eliminacion de usuario por id
      *
-     * @param idUser
+     * @param uuid
      */
     @Override
-    public void deleteUserById(Long idUser) {
+    public void deleteUserById(String uuid) {
 
-        if (idUser == 0L) {
-            throw new UserBadRequestException("id de usuario no puede ser cero, es requerido " + idUser);
+        if (uuid == null ||
+                uuid.isBlank() ||
+                uuid.isEmpty() ) {
+            throw new UserBadRequestException("Codigo de UUID de usuario es requerido " + uuid);
         }
-
-        Optional<UserEntity> userEntity = userRepository.findById(idUser);
+        Optional<UserEntity> userEntity = userRepository.getUserEntityByUuid(uuid);
 
         if (!userEntity.isPresent()) {
-            throw new UserBadRequestException("id de usuario no existe " + idUser);
+            throw new UserBadRequestException("uuid de usuario no existe " + uuid);
         }
-
-        userRepository.deleteById(idUser);
+        userRepository.deleteById(userEntity.get().getIdUser());
 
     }
 
@@ -216,5 +217,56 @@ public class UserServiceImpl implements IUserService {
         } else {
             throw new UserBadRequestException("No existe registros registrados");
         }
+    }
+
+    /**
+     * Servicio de creacion de usuario
+     *
+     * @param uuidUser
+     * @param request
+     * @return
+     */
+    @Override
+    public UserResponseDto updateUser(String uuidUser, UserRequestActDto request) {
+
+        UserResponseDto userResponseDto;
+        List<UserPhoneResponseDto> userPhoneResponseDtoList = new ArrayList<>();
+
+        if (uuidUser == null ||
+                uuidUser.isBlank() ||
+                uuidUser.isEmpty() ) {
+            throw new UserBadRequestException("Codigo de UUID de usuario es requerido " + uuidUser);
+        }
+
+        /* Valido los datos que ingresan */
+        userValidationUtil.validateRequestActDto(request);
+
+        Optional<UserEntity> userEntity = userRepository.getUserEntityByUuid(uuidUser);
+
+        if (!userEntity.isPresent()) {
+            throw new UserBadRequestException("uuid de usuario no existe " + uuidUser);
+        }
+
+        /* Hago los mapeos de los datos para el guardado de la informacion */
+        UserEntity userEntityUpd = userMapper.dtoToEntity(request);
+        /* Se guarda la informacion de la data de user */
+        userEntityUpd.setUuid(userEntity.get().getUuid());
+        userEntityUpd.setIdUser(userEntity.get().getIdUser());
+        userEntityUpd = userRepository.save(userEntityUpd);
+
+
+        for (UserPhoneRequestActDto listPhone: request.getUserPhones()) {
+            UserPhonesEntity userPhonesEntity = userPhoneMapper.dtoToEntity(listPhone, userEntityUpd);
+            userPhonesEntity = userPhoneRepository.save(userPhonesEntity);
+            /* Se genera mapeo de las caracteristicas del detalle de telefono */
+            UserPhoneResponseDto userPhoneResponseDto = new UserPhoneResponseDto();
+            userPhoneResponseDto = userPhoneMapper.entityToDtoResponse(userPhonesEntity);
+            userPhoneResponseDtoList.add(userPhoneResponseDto);
+        }
+
+        userResponseDto = userMapper.entityToDtoResponse(userEntityUpd);
+        userResponseDto.setUserPhoneResponseDtoList(userPhoneResponseDtoList);
+
+        return userResponseDto;
     }
 }

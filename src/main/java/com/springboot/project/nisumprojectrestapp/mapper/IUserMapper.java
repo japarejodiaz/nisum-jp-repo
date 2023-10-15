@@ -1,5 +1,6 @@
 package com.springboot.project.nisumprojectrestapp.mapper;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDto;
 import com.springboot.project.nisumprojectrestapp.dto.response.UserResponseDtos;
@@ -37,4 +38,6 @@ public interface IUserMapper {
      * @return
      */
     UserResponseDtos listUserDTOsb(List<UserEntity> listUserEntities);
+
+    UserEntity dtoToEntity(UserRequestActDto userRequestDto);
 }

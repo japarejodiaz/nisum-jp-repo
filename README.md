@@ -17,6 +17,9 @@
 # Ejecutar el proyecto 
 - nisum-project-rest-app/target$ java -jar nisum-project-rest-app-0.0.1-SNAPSHOT.jar
 
+#Swagger del proyecto URL
+- Esta es la direccion del Swagger para las pruebas de las funcionalidades ````http://localhost:8080/swagger-ui/index.html#/````
+
 # URL Base de Proyecto de Prueba. 
 - http://localhost:8080/users
 

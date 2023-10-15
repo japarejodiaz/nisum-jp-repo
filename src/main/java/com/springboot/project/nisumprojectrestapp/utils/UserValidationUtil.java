@@ -1,6 +1,8 @@
 package com.springboot.project.nisumprojectrestapp.utils;
 
+import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserPhoneRequestDto;
+import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestActDto;
 import com.springboot.project.nisumprojectrestapp.dto.request.UserRequestDto;
 import com.springboot.project.nisumprojectrestapp.entity.UserEntity;
 import com.springboot.project.nisumprojectrestapp.exceptions.UserBadRequestException;
@@ -18,20 +20,13 @@ import java.util.regex.Matcher;
 @Slf4j
 public class UserValidationUtil {
 
-    /*@Value("${config.rule.password}")
-    private static String PASSWORD_REGEX;*/
+    @Value("${config.rule.password}")
+    private String password_regex;
 
     @Autowired
     private IUserRepository userRepository;
 
-    // Contraseña de 8-16 caracteres con al menos un dígito, al menos una
-    // letra minúscula, al menos una letra mayúscula, al menos una
-    // caracter especial sin espacios en blanco
-    private static final String PASSWORD_REGEX =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,16}$";
-
-    private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile(PASSWORD_REGEX);
+    private static Pattern PASSWORD_PATTERN;
 
     private static final String EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
@@ -99,6 +94,10 @@ public class UserValidationUtil {
     }
 
     public void validarPasswordFormat(String password) {
+
+
+        PASSWORD_PATTERN = Pattern.compile(password_regex);
+
         if (PASSWORD_PATTERN.matcher(password).matches()) {
             log.info("The Password is valid");
         } else {
@@ -117,6 +116,66 @@ public class UserValidationUtil {
         } else {
             throw new UserBadRequestException("El formato de cuenta de correo es incorrecto, verifique ");
         }
+    }
+
+    public void validateRequestActDto(UserRequestActDto userRequestDto) {
+
+        if (userRequestDto.getName() == null ||
+                userRequestDto.getName().isEmpty() ||
+                userRequestDto.getName().isBlank()) {
+            throw new UserBadRequestException("El nombre es requerido " + userRequestDto.getName());
+        }
+
+        if (userRequestDto.getEmail() == null ||
+                userRequestDto.getEmail().isEmpty() ||
+                userRequestDto.getEmail().isBlank()) {
+            throw new UserBadRequestException("La cuenta de Correo es requerido " + userRequestDto.getEmail());
+        } else {
+            this.validateEmail(userRequestDto.getEmail());
+        }
+
+        if (userRequestDto.getPassword() == null ||
+                userRequestDto.getPassword().isEmpty() ||
+                userRequestDto.getPassword().isBlank()) {
+            throw new UserBadRequestException("La contrasena de Correo es requerido " +userRequestDto.getPassword());
+        } else {
+            this.validarPasswordFormat(userRequestDto.getPassword());
+        }
+
+        if (userRequestDto.getUserPhones() == null) {
+            throw new UserBadRequestException("Deben enviar la informacion de telefono del usuario ");
+        }
+
+        for (UserPhoneRequestActDto listPhone : userRequestDto.getUserPhones()) {
+
+            if (listPhone.getIdUser() == null || listPhone.getIdUser() == 0L) {
+                throw new UserBadRequestException("Se debe ingresar el identificador del usuario de la linea para modificar, es requerido " ) ;
+            }
+
+            if (listPhone.getIdPhone() == null || listPhone.getIdPhone()  == 0L) {
+                throw new UserBadRequestException("Se debe ingresar el identificador de la linea de telefono para modificar, es requerido " );
+            }
+
+            if (listPhone.getCityCode() == null ||
+                    listPhone.getCityCode().isEmpty() ||
+                    listPhone.getCityCode().isBlank()) {
+                throw new UserBadRequestException("Se debe ingresar el codigo de ciudad o area del telefono del usuario ");
+            }
+
+            if (listPhone.getNumberPhone() == null ||
+                    listPhone.getNumberPhone().isEmpty() ||
+                    listPhone.getNumberPhone().isBlank()) {
+                throw new UserBadRequestException("Se debe ingresar el numero telefono del usuario ");
+            }
+
+            if (listPhone.getCountryCode() == null ||
+                    listPhone.getCountryCode().isEmpty() ||
+                    listPhone.getCountryCode().isBlank()) {
+                throw new UserBadRequestException("Se debe ingresar el codigo de pais del telefono del usuario ");
+            }
+
+        }
+
     }
 }
 
